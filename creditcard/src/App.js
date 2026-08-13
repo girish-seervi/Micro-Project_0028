@@ -6,7 +6,6 @@ import Toast from './components/Toast';
 import './App.css';
 
 function App() {
-  // Draft form data typed in input fields
   const [formData, setFormData] = useState({
     name: '',
     number: '',
@@ -15,7 +14,6 @@ function App() {
     cvc: ''
   });
 
-  // Confirmed card data (displayed on credit card)
   const [cardData, setCardData] = useState({
     name: '',
     number: '',
@@ -30,7 +28,6 @@ function App() {
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error for field as user edits
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
@@ -39,12 +36,10 @@ function App() {
   const validateForm = () => {
     const newErrors = {};
 
-    // Validate Name
     if (!formData.name.trim()) {
       newErrors.name = "Can't be blank";
     }
 
-    // Validate Card Number
     const rawNumber = formData.number.replace(/\s+/g, '');
     if (!formData.number.trim()) {
       newErrors.number = "Can't be blank";
@@ -54,7 +49,6 @@ function App() {
       newErrors.number = "Must be 16 digits";
     }
 
-    // Validate Expiry Month
     if (!formData.month.trim()) {
       newErrors.month = "Can't be blank";
     } else {
@@ -64,14 +58,12 @@ function App() {
       }
     }
 
-    // Validate Expiry Year
     if (!formData.year.trim()) {
       newErrors.year = "Can't be blank";
     } else if (formData.year.length !== 2) {
       newErrors.year = "Must be 2 digits";
     }
 
-    // Validate CVC
     if (!formData.cvc.trim()) {
       newErrors.cvc = "Can't be blank";
     } else if (!/^\d+$/.test(formData.cvc)) {
@@ -88,7 +80,6 @@ function App() {
     e.preventDefault();
 
     if (validateForm()) {
-      // Update confirmed card details display upon successful confirmation
       setCardData({ ...formData });
       setIsSubmitted(true);
       setShowToast(true);
@@ -124,12 +115,13 @@ function App() {
         />
       )}
 
-      {/* Left Sidebar / Top Banner with Credit Cards */}
-      <section className="sidebar" aria-label="Card preview banner">
-        <CreditCard cardData={isSubmitted ? cardData : formData} />
-      </section>
+      {/* Left Sidebar Background */}
+      <section className="sidebar" aria-label="Sidebar background" />
 
-      {/* Right Content Area: Form or Success View */}
+      {/* Credit Cards Overlay (positioned over border between sidebar & main content) */}
+      <CreditCard cardData={isSubmitted ? cardData : formData} />
+
+      {/* Right Main Content Form */}
       <main className="main-content">
         <div className="form-wrapper">
           {isSubmitted ? (
